@@ -1,4 +1,5 @@
 use clap::{arg, command, Command};
+use std::path::PathBuf;
 
 fn main() {
     let matches = command!()
@@ -9,19 +10,13 @@ fn main() {
 
 struct Board {
     name: String,
+    location: PathBuf,
 }
 
 struct Ticket {
-    acceptance_criteria: String,
-    description: String,
-    tags: Vec<Tag>,
     title: String,
-    urgent: bool,
-}
-
-struct Tag {
-    color: String,
-    name: String,
+    description: String,
+    acceptance_criteria: String,
 }
 
 enum State {
@@ -31,3 +26,4 @@ enum State {
     Review { limit: i8 },
     Complete { limit: isize },
 }
+
