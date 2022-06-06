@@ -1,4 +1,6 @@
 use clap::{arg, ArgMatches, command, Command};
+mod board;
+mod ticket;
 
 fn main() {
     let matches = command!()
@@ -27,9 +29,9 @@ fn main() {
 
 fn run(matches: ArgMatches) {
     match matches.subcommand() {
-        Some(("board", board_args)) => println!("BOARD"),
-        Some(("ticket", wow)) => println!("TICKET"),
-        _ => println!("NOTHING")
+        Some(("board", board_args)) => board::run(board_args),
+        Some(("ticket", ticket_args)) => ticket::run(ticket_args),
+        _ => println!("Current board will be displayed here.")
     }
 }
 
