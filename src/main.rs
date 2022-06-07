@@ -1,12 +1,23 @@
 use ::std::path::PathBuf;
-use clap::Parser;
+use clap::{Parser, Subcommand};
 
 fn main() {
-    let args = Board::parse();
+    let args = Cli::parse();
     println!("{:?}", args)
 }
 
 #[derive(Parser, Debug)]
+struct Cli {
+    #[clap(subcommand)]
+    command: Command,
+}
+
+#[derive(Subcommand, Debug)]
+enum Command {
+    board,
+    ticket,
+}
+
 struct Board {
     name: String,
     location: PathBuf,
