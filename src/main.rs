@@ -1,37 +1,27 @@
-use clap::{arg, ArgMatches, command, Command};
-mod board;
-mod ticket;
+use ::std::path::PathBuf;
+use clap::Parser;
 
 fn main() {
-    let matches = command!()
-        .disable_help_subcommand(true)
-        .subcommand(
-            Command::new("board")
-            .about("Initialize, List, and Remove Boards")
-            .arg(arg!(-i --init "Initialize a board in current git repository"))
-            .arg(arg!(-l --list "List of initalized boards on system"))
-            .arg(arg!(-r --remove "Remove board based on current git repository"))
-        )
-        .subcommand(
-            Command::new("ticket")
-            .about("Create, Read, Update, and Delete Tickets")
-            .arg(arg!(-c --create "Create a new ticket"))
-            .arg(arg!(-r --read "View details of an existing ticket"))
-            .arg(arg!(-u --update "Update details on an existing ticket"))
-            .arg(arg!(-d --delete "Delete an existing ticket"))
-            .arg(arg!(-l --list "List all existing tickets in the current board"))
-            .arg(arg!(-m --move "Move ticket to a different state on the current board"))
-        )
-        .get_matches();
-
-    run(matches)
+    let args = Board::parse();
+    println!("{:?}", args)
 }
 
-fn run(matches: ArgMatches) {
-    match matches.subcommand() {
-        Some(("board", board_args)) => board::run(board_args),
-        Some(("ticket", ticket_args)) => ticket::run(ticket_args),
-        _ => println!("Current board will be displayed here.")
-    }
+#[derive(Parser, Debug)]
+struct Board {
+    name: String,
+    location: PathBuf,
 }
 
+struct Ticket {
+    title: String,
+    description: String,
+    acceptance_criteria: String,
+}
+
+enum State {
+    ToDo { limit: isize },
+    Blocked { limit: isize },
+    Doing { limit: i8 },
+    Review { limit: i8 },
+    Complete { limit: isize },
+}
