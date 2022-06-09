@@ -1,25 +1,21 @@
 use clap::{Parser, Subcommand};
-mod board;
-mod ticket;
 
-fn main() {
-    let args = Cli::parse();
-    match args.subcommands {
-        GrangerSubcommand::Board => board::run(),
-        GrangerSubcommand::Ticket => ticket::run(),
-    }
+mod board;
+use crate::board::BoardCommand;
+
+#[derive(Debug, Subcommand)]
+enum GrangerSubcommand {
+    /// Manage Boards
+    Board(BoardCommand),
 }
 
-#[derive(Parser, Debug)]
-struct Cli {
+#[derive(Debug, Parser)]
+#[clap(about, author, version)]
+struct GrangerArguments {
     #[clap(subcommand)]
     subcommands: GrangerSubcommand,
 }
 
-#[derive(Subcommand, Debug)]
-enum GrangerSubcommand {
-    /// Manage Boards
-    Board,
-    /// Manage Tickets
-    Ticket,
+fn main() {
+    let args = GrangerArguments::parse();
 }
