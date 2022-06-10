@@ -3,10 +3,16 @@ use clap::{Parser, Subcommand};
 mod board;
 use crate::board::BoardCommand;
 
+mod ticket;
+use crate::ticket::TicketCommand;
+
 #[derive(Debug, Subcommand)]
 enum GrangerSubcommand {
     /// Manage Boards
     Board(BoardCommand),
+
+    /// Manage Tickets
+    Ticket(TicketCommand),
 }
 
 #[derive(Debug, Parser)]
