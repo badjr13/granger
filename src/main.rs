@@ -26,10 +26,38 @@ struct GrangerArguments {
 fn main() {
     let args = GrangerArguments::parse();
 
-    println!("{:?}", args.subcommands);
-
-    match args.subcommands {
-        GrangerSubcommand::Board(_) => println!("BOARD"),
-        GrangerSubcommand::Ticket(_) => println!("TICKET"),
+    match &args.subcommands {
+        GrangerSubcommand::Board(option) => {
+            if option.init {
+                println!("INIT")
+            }
+            if option.list {
+                println!("LIST")
+            }
+            if option.remove {
+                println!("REMOVE")
+            }
+        }
+        GrangerSubcommand::Ticket(x) => println!("TICKET: {:?}", x)
+        // GrangerSubcommand::Ticket(option) => {
+        //     if option.create{
+        //         println!("CREATE")
+        //     }
+        //     if option.read {
+        //         println!("READ")
+        //     }
+        //     if option.update {
+        //         println!("UPDATE")
+        //     }
+        //     if option.delete {
+        //         println!("DELETE")
+        //     }
+        //     if option.list {
+        //         println!("LIST")
+        //     }
+        //     if option.move {
+        //         println!("MOVE")
+        //     }
+        // },
     }
 }
