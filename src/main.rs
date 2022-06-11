@@ -7,6 +7,7 @@ mod ticket;
 use crate::ticket::TicketCommand;
 
 #[derive(Debug, Subcommand)]
+#[clap(disable_help_subcommand = true)]
 enum GrangerSubcommand {
     /// Manage Boards
     Board(BoardCommand),
@@ -24,6 +25,8 @@ struct GrangerArguments {
 
 fn main() {
     let args = GrangerArguments::parse();
+
+    println!("{:?}", args.subcommands);
 
     match args.subcommands {
         GrangerSubcommand::Board(_) => println!("BOARD"),
