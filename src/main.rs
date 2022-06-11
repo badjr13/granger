@@ -38,26 +38,27 @@ fn main() {
                 println!("REMOVE")
             }
         }
-        GrangerSubcommand::Ticket(x) => println!("TICKET: {:?}", x)
-        // GrangerSubcommand::Ticket(option) => {
-        //     if option.create{
-        //         println!("CREATE")
-        //     }
-        //     if option.read {
-        //         println!("READ")
-        //     }
-        //     if option.update {
-        //         println!("UPDATE")
-        //     }
-        //     if option.delete {
-        //         println!("DELETE")
-        //     }
-        //     if option.list {
-        //         println!("LIST")
-        //     }
-        //     if option.move {
-        //         println!("MOVE")
-        //     }
-        // },
+        // GrangerSubcommand::Ticket(x) => println!("TICKET: {:?}", x)
+        GrangerSubcommand::Ticket(option) => {
+            println!("{:?}", option);
+            if option.create {
+                println!("CREATE")
+            }
+            if option.read.is_some() {
+                println!("READ")
+            }
+            if option.update.is_some() {
+                println!("UPDATE")
+            }
+            if option.delete.is_some() {
+                println!("DELETE")
+            }
+            if option.list {
+                println!("LIST")
+            }
+            if option.r#move.is_some() {
+                println!("MOVE")
+            }
+        }
     }
 }
