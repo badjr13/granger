@@ -2,15 +2,15 @@ use clap::Args;
 
 #[derive(Args, Debug)]
 pub struct BoardCommand {
-    #[clap(long)]
-    /// Initialize a board in current git repository
+    #[clap(short, long, display_order = 1)]
+    /// Initialize a board in local git repository
     init: bool,
 
-    #[clap(long)]
-    /// List of initalized boards on system
+    #[clap(short, long, display_order = 2)]
+    /// List all boards on system
     list: bool,
 
-    /// Remove board based in current git repository
-    #[clap(long)]
+    /// Remove board based on local git repository
+    #[clap(short, long, display_order = 3)]
     remove: bool,
 }

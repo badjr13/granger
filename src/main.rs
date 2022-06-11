@@ -24,4 +24,9 @@ struct GrangerArguments {
 
 fn main() {
     let args = GrangerArguments::parse();
+
+    match args.subcommands {
+        GrangerSubcommand::Board(_) => println!("BOARD"),
+        GrangerSubcommand::Ticket(_) => println!("TICKET"),
+    }
 }
