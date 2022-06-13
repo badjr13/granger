@@ -1,28 +1,48 @@
-use clap::Args;
+use clap::{Arg, Command};
 
-#[derive(Args, Debug)]
-pub struct TicketCommand {
-    #[clap(short, long, display_order = 1)]
-    /// Create a new ticket
-    pub create: bool,
-
-    #[clap(short, long, value_name = "ID", display_order = 2)]
-    /// View details of an existing ticket
-    pub read: Option<usize>,
-
-    /// Update details of an existing ticket
-    #[clap(short, long, value_name = "ID", display_order = 3)]
-    pub update: Option<usize>,
-
-    /// Delete an existing ticket
-    #[clap(short, long, value_name = "ID", display_order = 4)]
-    pub delete: Option<usize>,
-
-    /// List all existing tickets in local board
-    #[clap(short, long, display_order = 5)]
-    pub list: bool,
-
-    /// Move ticket to a different state in local board
-    #[clap(short, long, value_names = &["ID", "STATE"], display_order = 6)]
-    pub r#move: Option<String>,
+pub fn get_ticket_command() -> Command<'static> {
+    Command::new("ticket")
+        .about("Manage Tickets")
+        .arg(
+            Arg::new("create")
+                .short('c')
+                .long("create")
+                .help("Create a new ticket")
+                .display_order(1),
+        )
+        .arg(
+            Arg::new("read")
+                .short('r')
+                .long("read")
+                .help("View details of an existing ticket")
+                .display_order(2),
+        )
+        .arg(
+            Arg::new("update")
+                .short('u')
+                .long("update")
+                .help("Update details of an existing ticket")
+                .display_order(3),
+        )
+        .arg(
+            Arg::new("delete")
+                .short('d')
+                .long("delete")
+                .help("Delete an existing ticket")
+                .display_order(4),
+        )
+        .arg(
+            Arg::new("list")
+                .short('l')
+                .long("list")
+                .help("List all existing tickets in local board")
+                .display_order(5),
+        )
+        .arg(
+            Arg::new("move")
+                .short('m')
+                .long("move")
+                .help("Move ticket to a different state in local board")
+                .display_order(6),
+        )
 }
