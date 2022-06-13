@@ -6,6 +6,18 @@ use crate::board::BoardCommand;
 mod ticket;
 use crate::ticket::TicketCommand;
 
+fn main() {
+    let args = GrangerArguments::parse();
+    parse(args)
+}
+
+#[derive(Debug, Parser)]
+#[clap(about, author, version)]
+struct GrangerArguments {
+    #[clap(subcommand)]
+    subcommands: GrangerSubcommand,
+}
+
 #[derive(Debug, Subcommand)]
 #[clap(disable_help_subcommand = true)]
 enum GrangerSubcommand {
@@ -16,16 +28,7 @@ enum GrangerSubcommand {
     Ticket(TicketCommand),
 }
 
-#[derive(Debug, Parser)]
-#[clap(about, author, version)]
-struct GrangerArguments {
-    #[clap(subcommand)]
-    subcommands: GrangerSubcommand,
-}
-
-fn main() {
-    let args = GrangerArguments::parse();
-
+fn parse(args: GrangerArguments) {
     match &args.subcommands {
         GrangerSubcommand::Board(option) => {
             if option.init {
@@ -38,9 +41,7 @@ fn main() {
                 println!("REMOVE")
             }
         }
-        // GrangerSubcommand::Ticket(x) => println!("TICKET: {:?}", x)
         GrangerSubcommand::Ticket(option) => {
-            println!("{:?}", option);
             if option.create {
                 println!("CREATE")
             }

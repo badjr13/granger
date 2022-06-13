@@ -24,5 +24,5 @@ pub struct TicketCommand {
 
     /// Move ticket to a different state in local board
     #[clap(short, long, value_names = &["ID", "STATE"], display_order = 6)]
-    pub r#move: Option<usize>,
+    pub r#move: Option<String>,
 }
