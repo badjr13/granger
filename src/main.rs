@@ -1,32 +1,14 @@
 use clap::{Arg, Command};
 
+mod board;
+use crate::board::get_board_command;
+
 fn main() {
     let matches = Command::new("granger")
         .about("An opinionated Kanban Board for the solo developer.")
         .arg_required_else_help(true)
         .subcommand_required(true)
-        .subcommand(
-            Command::new("board")
-                .about("Manage Boards")
-                .arg(
-                    Arg::new("init")
-                        .short('i')
-                        .long("init")
-                        .help("Initialize a board in local git repository"),
-                )
-                .arg(
-                    Arg::new("list")
-                        .short('l')
-                        .long("list")
-                        .help("List all boards on system"),
-                )
-                .arg(
-                    Arg::new("remove")
-                        .short('r')
-                        .long("remove")
-                        .help("Remove board based on local git repository"),
-                ),
-        )
+        .subcommand(get_board_command())
         .subcommand(
             Command::new("ticket")
                 .about("Manage Tickets")
