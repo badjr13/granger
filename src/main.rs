@@ -1,4 +1,4 @@
-use clap::Command;
+use clap::{ArgMatches, Command};
 
 mod board;
 use crate::board::get_board_command;
@@ -14,4 +14,10 @@ fn main() {
         .subcommand(get_board_command())
         .subcommand(get_ticket_command())
         .get_matches();
+
+    run(matches)
+}
+
+fn run(args: ArgMatches) {
+    todo!()
 }
