@@ -1,4 +1,4 @@
-use clap::{Arg, Command};
+use clap::{Arg, ArgMatches, Command};
 
 pub fn get_board_command() -> Command<'static> {
     Command::new("board")
@@ -21,4 +21,16 @@ pub fn get_board_command() -> Command<'static> {
                 .long("remove")
                 .help("Remove board based on local git repository"),
         )
+}
+
+pub fn parse_board_options(options: &ArgMatches) {
+    if options.is_present("init") {
+        println!("INIT")
+    }
+    if options.is_present("list") {
+        println!("LIST")
+    }
+    if options.is_present("remove") {
+        println!("REMOVE")
+    }
 }

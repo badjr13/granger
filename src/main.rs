@@ -1,10 +1,10 @@
 use clap::{ArgMatches, Command};
 
 mod board;
-use crate::board::get_board_command;
+use crate::board::{get_board_command, parse_board_options};
 
 mod ticket;
-use crate::ticket::get_ticket_command;
+use crate::ticket::{get_ticket_command, parse_ticket_options};
 
 fn main() {
     let matches = Command::new("granger")
@@ -31,38 +31,5 @@ fn parse_subcommands(args: ArgMatches) {
             }
         }
         _ => todo!(),
-    }
-}
-
-fn parse_board_options(options: &ArgMatches) {
-    if options.is_present("init") {
-        println!("INIT")
-    }
-    if options.is_present("list") {
-        println!("LIST")
-    }
-    if options.is_present("remove") {
-        println!("REMOVE")
-    }
-}
-
-fn parse_ticket_options(options: &ArgMatches) {
-    if options.is_present("create") {
-        println!("CREATE")
-    }
-    if options.is_present("read") {
-        println!("READ")
-    }
-    if options.is_present("update") {
-        println!("UPDATE")
-    }
-    if options.is_present("delete") {
-        println!("DELETE")
-    }
-    if options.is_present("list") {
-        println!("LIST")
-    }
-    if options.is_present("move") {
-        println!("MOVE")
     }
 }
