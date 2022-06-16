@@ -1,5 +1,7 @@
 use clap::{ArgMatches, Command};
 
+mod board;
+
 mod board_command;
 use crate::board_command::{get_board_command, parse_board_options};
 
@@ -22,12 +24,12 @@ fn parse_subcommands(args: ArgMatches) {
     match args.subcommand() {
         Some(("board", options)) => {
             if options.args_present() {
-                parse_board_options(options)
+                parse_board_options(options);
             }
         }
         Some(("ticket", options)) => {
             if options.args_present() {
-                parse_ticket_options(options)
+                parse_ticket_options(options);
             }
         }
         _ => todo!(),
