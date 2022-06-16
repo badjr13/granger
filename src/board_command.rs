@@ -1,3 +1,4 @@
+use crate::board::Board;
 use clap::{Arg, ArgMatches, Command};
 use std::env::current_dir;
 use std::path::PathBuf;
@@ -30,8 +31,9 @@ pub fn get_board_command() -> Command<'static> {
 pub fn parse_board_options(options: &ArgMatches) {
     if options.is_present("init") {
         let location = current_dir().expect("Failure to get current working directory.");
-        if is_git_repository(location) {
-            todo!() // initialize a new board
+        if get_root_if_git_repository(&location) {
+            println!("You've made it this far!");
+            // Board::new(location);
         } else {
             eprintln!("Boards must be initialized inside of a git repository.");
         }
@@ -44,17 +46,18 @@ pub fn parse_board_options(options: &ArgMatches) {
     }
 }
 
-fn is_git_repository(location: PathBuf) -> bool {
+// Refactor to return git repo root location to be passed to Board::new(location)
+fn get_root_if_git_repository(location: &PathBuf) -> bool {
     let output = process::Command::new("git")
-        .args(["rev-parse", "--is-inside-work-tree"])
         .current_dir(location)
+        .args(["rev-parse", "--show-toplevel"])
         .output();
 
     if let Ok(value) = output {
-        if from_utf8(&value.stdout) == Ok("true\n") {
-            true
-        } else {
+        if value.stdout.is_empty() {
             false
+        } else {
+            true
         }
     } else {
         false
