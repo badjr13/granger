@@ -1,10 +1,10 @@
 use clap::{ArgMatches, Command};
 
-mod board;
-use crate::board::{get_board_command, parse_board_options};
+mod board_command;
+use crate::board_command::{get_board_command, parse_board_options};
 
-mod ticket;
-use crate::ticket::{get_ticket_command, parse_ticket_options};
+mod ticket_command;
+use crate::ticket_command::{get_ticket_command, parse_ticket_options};
 
 fn main() {
     let matches = Command::new("granger")
