@@ -30,13 +30,11 @@ pub fn get_board_command() -> Command<'static> {
 
 pub fn parse_board_options(options: &ArgMatches) {
     if options.is_present("init") {
-        let location = current_dir().expect("Failure to get current working directory.");
-        if get_root_if_git_repository(&location) {
-            println!("You've made it this far!");
-            // Board::new(location);
-        } else {
-            eprintln!("Boards must be initialized inside of a git repository.");
-        }
+        let working_directory = current_dir().expect("Failure to get current working directory.");
+        let location = get_root_if_git_repository(&working_directory);
+        println!("{:?}", location.unwrap())
+        // let board = Board::new(location);
+        // println!("{:?}", board);
     }
     if options.is_present("list") {
         println!("LIST");
@@ -46,20 +44,23 @@ pub fn parse_board_options(options: &ArgMatches) {
     }
 }
 
-// Refactor to return git repo root location to be passed to Board::new(location)
-fn get_root_if_git_repository(location: &PathBuf) -> bool {
+fn get_root_if_git_repository(location: &PathBuf) -> Result<PathBuf, &'static str> {
+    // "git rev-parse --show-toplevel" returns the root of a git repository
+    // if called anywhere inside git repository
     let output = process::Command::new("git")
-        .current_dir(location)
         .args(["rev-parse", "--show-toplevel"])
+        .current_dir(location)
         .output();
 
-    if let Ok(value) = output {
-        if value.stdout.is_empty() {
-            false
-        } else {
-            true
+    match output {
+        Ok(value) => {
+            if value.stdout.is_empty() {
+                Err("NO")
+            } else {
+                let root_as_string = from_utf8(&value.stdout).unwrap();
+                Ok(PathBuf::from(root_as_string))
+            }
         }
-    } else {
-        false
+        Err(_) => Err("NO 2"),
     }
 }
