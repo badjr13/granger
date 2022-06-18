@@ -44,8 +44,8 @@ pub fn parse_board_options(options: &ArgMatches) {
 }
 
 fn get_root_if_git_repository(location: &PathBuf) -> Result<PathBuf, &'static str> {
-    // "git rev-parse --show-toplevel" returns the root of a git repository
-    // if called anywhere inside git repository
+    // "git rev-parse --show-toplevel" returns the path to the root
+    // of a git repository if called anywhere inside git repository
     let output = process::Command::new("git")
         .args(["rev-parse", "--show-toplevel"])
         .current_dir(location)
