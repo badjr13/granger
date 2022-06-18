@@ -1,5 +1,8 @@
 use clap::{ArgMatches, Command};
 
+mod database;
+use crate::database::inintialize_database;
+
 mod board;
 use crate::board::command::{get_board_command, parse_board_options};
 
@@ -7,6 +10,8 @@ mod ticket;
 use crate::ticket::command::{get_ticket_command, parse_ticket_options};
 
 fn main() {
+    inintialize_database().unwrap();
+
     let matches = Command::new("granger")
         .about("An opinionated Kanban Board for the solo developer.")
         .disable_help_subcommand(true)
