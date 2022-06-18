@@ -32,9 +32,8 @@ pub fn parse_board_options(options: &ArgMatches) {
     if options.is_present("init") {
         let working_directory = current_dir().expect("Failure to get current working directory.");
         let location = get_root_if_git_repository(&working_directory);
-        println!("{:?}", location.unwrap())
-        // let board = Board::new(location);
-        // println!("{:?}", board);
+        let board = Board::new(location.unwrap());
+        println!("{:?}", board);
     }
     if options.is_present("list") {
         println!("LIST");
@@ -58,7 +57,7 @@ fn get_root_if_git_repository(location: &PathBuf) -> Result<PathBuf, &'static st
                 Err("NO")
             } else {
                 let root_as_string = from_utf8(&value.stdout).unwrap();
-                Ok(PathBuf::from(root_as_string))
+                Ok(PathBuf::from(root_as_string.trim()))
             }
         }
         Err(_) => Err("NO 2"),
