@@ -3,8 +3,8 @@ use clap::{ArgMatches, Command};
 mod board;
 use crate::board::command::{get_board_command, parse_board_options};
 
-mod ticket_command;
-use crate::ticket_command::{get_ticket_command, parse_ticket_options};
+mod ticket;
+use crate::ticket::command::{get_ticket_command, parse_ticket_options};
 
 fn main() {
     let matches = Command::new("granger")
