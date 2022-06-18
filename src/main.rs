@@ -1,9 +1,7 @@
 use clap::{ArgMatches, Command};
 
 mod board;
-
-mod board_command;
-use crate::board_command::{get_board_command, parse_board_options};
+use crate::board::command::{get_board_command, parse_board_options};
 
 mod ticket_command;
 use crate::ticket_command::{get_ticket_command, parse_ticket_options};

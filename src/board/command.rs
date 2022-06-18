@@ -1,4 +1,4 @@
-use crate::board::Board;
+use crate::board::model::Board;
 use clap::{Arg, ArgMatches, Command};
 use std::env::current_dir;
 use std::path::PathBuf;
