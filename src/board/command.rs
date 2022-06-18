@@ -30,9 +30,16 @@ pub fn get_board_command() -> Command<'static> {
 
 pub fn parse_board_options(options: &ArgMatches) {
     if options.is_present("init") {
-        let working_directory = current_dir().expect("Failure to get current working directory.");
-        let location = get_root_if_git_repository(&working_directory);
-        let board = Board::new(location.unwrap());
+        let current_working_directory =
+            current_dir().expect("Failure to get current working directory.");
+
+        let path_to_git_repository =
+            get_root_path_if_git_repository(&current_working_directory).unwrap();
+
+        let git_repository_name = get_git_repository_name(&path_to_git_repository);
+
+        let board = Board::new(path_to_git_repository, git_repository_name);
+
         println!("{:?}", board);
     }
     if options.is_present("list") {
@@ -43,7 +50,7 @@ pub fn parse_board_options(options: &ArgMatches) {
     }
 }
 
-fn get_root_if_git_repository(location: &PathBuf) -> Result<PathBuf, &'static str> {
+fn get_root_path_if_git_repository(location: &PathBuf) -> Result<PathBuf, &'static str> {
     // "git rev-parse --show-toplevel" returns the path to the root
     // of a git repository if called anywhere inside git repository
     let output = process::Command::new("git")
@@ -54,12 +61,20 @@ fn get_root_if_git_repository(location: &PathBuf) -> Result<PathBuf, &'static st
     match output {
         Ok(value) => {
             if value.stdout.is_empty() {
-                Err("NO")
+                Err("Boards must be initialized inside of a git repository.")
             } else {
                 let root_as_string = from_utf8(&value.stdout).unwrap();
                 Ok(PathBuf::from(root_as_string.trim()))
             }
         }
-        Err(_) => Err("NO 2"),
+        Err(_) => Err("Unreachable?"),
     }
+}
+
+fn get_git_repository_name(location: &PathBuf) -> String {
+    // return everything after last "/" in path
+    // example:
+    //    /home/bobby/workspaces/granger -> granger
+    let mut output: Vec<&str> = location.to_str().unwrap().split('/').collect();
+    output.pop().unwrap().to_string()
 }
