@@ -1,11 +1,14 @@
 use rusqlite::{Connection, Result};
 
-pub fn inintialize_database() -> Result<()> {
+pub fn get_connection() -> Result<Connection, rusqlite::Error> {
     let path = "./granger.db";
+    Connection::open(&path)
+}
 
-    let conn = Connection::open(&path)?;
+pub fn inintialize_database() -> Result<()> {
+    let connection = get_connection().unwrap();
 
-    conn.execute(
+    connection.execute(
         "CREATE TABLE IF NOT EXISTS board (
             id          INTEGER PRIMARY KEY,
             location    TEXT NOT NULL,

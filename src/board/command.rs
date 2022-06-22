@@ -1,7 +1,8 @@
+use crate::board;
 use crate::board::model::Board;
 use clap::{Arg, ArgMatches, Command};
 use std::env::current_dir;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process;
 use std::str::from_utf8;
 
@@ -40,7 +41,7 @@ pub fn parse_board_options(options: &ArgMatches) {
 
         let board = Board::new(path_to_git_repository, git_repository_name);
 
-        println!("{:?}", board);
+        board::data::add(board);
     }
     if options.is_present("list") {
         println!("LIST");
@@ -71,7 +72,7 @@ fn get_root_path_if_git_repository(location: &PathBuf) -> Result<PathBuf, &'stat
     }
 }
 
-fn get_git_repository_name(location: &PathBuf) -> String {
+fn get_git_repository_name(location: &Path) -> String {
     // return everything after last "/" in path
     // example:
     //    /home/bobby/workspaces/granger -> granger

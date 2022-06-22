@@ -2,9 +2,9 @@ use std::path::{Path, PathBuf};
 
 #[derive(Debug)]
 pub struct Board {
-    id: u8,
-    location: PathBuf,
-    name: String,
+    pub id: u8,
+    pub location: PathBuf,
+    pub name: String,
 }
 
 impl Board {
