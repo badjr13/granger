@@ -4,7 +4,7 @@ use std::fs::OpenOptions;
 use std::path::PathBuf;
 
 pub fn get_granger_db_directory() -> PathBuf {
-    dirs::config_dir()
+    dirs::data_dir()
         .expect("Failed to find laydown config directory")
         .join("granger")
 }
