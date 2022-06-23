@@ -7,10 +7,10 @@ pub fn add(board: Board) -> Result<()> {
 
     connection.execute(
         "
-        INSERT INTO board (id, location, name)
-        VALUES(?1, ?2, ?3)
+        INSERT INTO board (location, name)
+        VALUES(?1, ?2)
         ",
-        params![board.id, board.location.to_str(), board.name],
+        params![board.location.to_str(), board.name],
     )?;
 
     Ok(())
