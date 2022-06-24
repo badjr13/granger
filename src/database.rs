@@ -36,7 +36,7 @@ pub fn inintialize_database() -> Result<()> {
         "CREATE TABLE IF NOT EXISTS board (
             id          INTEGER PRIMARY KEY,
             location    TEXT NOT NULL,
-            name        BLOB
+            name        TEXT NOT NULL,
         )",
         [],
     )?;
