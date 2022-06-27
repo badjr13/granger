@@ -35,8 +35,8 @@ pub fn inintialize_database() -> Result<()> {
     connection.execute(
         "CREATE TABLE IF NOT EXISTS board (
             id          INTEGER PRIMARY KEY,
-            location    TEXT NOT NULL,
-            name        TEXT NOT NULL
+            name        TEXT NOT NULL,
+            location    TEXT NOT NULL
         )",
         [],
     )?;

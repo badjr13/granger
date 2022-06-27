@@ -6,11 +6,11 @@ pub struct Board {
 }
 
 impl Board {
-    pub fn new(name: String, location: String) -> Board {
+    pub fn new(name: &String, location: &String) -> Board {
         Board {
             id: 0,
-            name,
-            location,
+            name: name.to_string(),
+            location: location.to_string(),
         }
     }
 }

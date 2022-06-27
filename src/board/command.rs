@@ -39,14 +39,24 @@ pub fn parse_board_options(options: &ArgMatches) {
 
         let git_repository_name = get_git_repository_name(&path_to_git_repository);
 
-        let board = Board::new(git_repository_name, path_to_git_repository);
+        let board = Board::new(&git_repository_name, &path_to_git_repository);
 
-        board::data::add(board);
+        match board::data::add(board) {
+            Ok(_) => println!(
+                "'{}' board has been created at '{}'.",
+                git_repository_name, path_to_git_repository
+            ),
+            Err(value) => println!(
+                "Error creating '{}' board at '{}': {}",
+                git_repository_name, path_to_git_repository, value
+            ),
+        }
     }
     if options.is_present("list") {
         let boards = board::data::get_all();
 
-        for board in boards {
+        if let Ok(board) = boards {
+            // Update to use display::fmt or board names only
             println!("{:?}", board);
         }
     }
@@ -76,7 +86,7 @@ fn get_root_path_if_git_repository(location: &PathBuf) -> Result<String, &'stati
     }
 }
 
-fn get_git_repository_name(location: &String) -> String {
+fn get_git_repository_name(location: &str) -> String {
     // return everything after last "/" in path
     // example:
     //    /home/bobby/workspaces/granger -> granger
