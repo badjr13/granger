@@ -3,15 +3,40 @@ use crate::database::get_connection;
 use rusqlite::{params, Result};
 
 pub fn add(board: Board) -> Result<()> {
-    let connection = get_connection().unwrap();
+    let connection = get_connection()?;
 
     connection.execute(
         "
-        INSERT INTO board (location, name)
+        INSERT INTO board (name, location)
         VALUES(?1, ?2)
         ",
-        params![board.location.to_str(), board.name],
+        params![board.name, board.location],
     )?;
 
     Ok(())
+}
+
+pub fn get_all() -> Result<Vec<Board>> {
+    let connection = get_connection()?;
+
+    let mut statement = connection.prepare("SELECT * FROM board;")?;
+
+    let board_iter = statement.query_map([], |row| {
+        Ok(Board {
+            id: row.get(0)?,
+            name: row.get(1)?,
+            location: row.get(2)?,
+        })
+    })?;
+
+    let mut boards = Vec::new();
+
+    for board_result in board_iter {
+        match board_result {
+            Ok(board) => boards.push(board),
+            Err(value) => println!("Error while fetching boards: {}", value),
+        }
+    }
+
+    Ok(boards)
 }
