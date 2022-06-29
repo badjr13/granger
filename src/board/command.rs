@@ -61,7 +61,15 @@ pub fn parse_board_options(options: &ArgMatches) {
         }
     }
     if options.is_present("remove") {
-        println!("REMOVE");
+        let current_working_directory =
+            current_dir().expect("Failure to get current working directory.");
+
+        let path_to_git_repository =
+            get_root_path_if_git_repository(&current_working_directory).unwrap();
+
+        let board = board::data::get_one_by_location(path_to_git_repository).unwrap();
+
+        board::data::remove(board.id);
     }
 }
 

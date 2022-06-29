@@ -8,7 +8,7 @@ pub fn add(board: Board) -> Result<()> {
     connection.execute(
         "
         INSERT INTO board (name, location)
-        VALUES(?1, ?2)
+        VALUES(?1, ?2);
         ",
         params![board.name, board.location],
     )?;
@@ -39,4 +39,42 @@ pub fn get_all() -> Result<Vec<Board>> {
     }
 
     Ok(boards)
+}
+
+pub fn get_one_by_location(location: String) -> Result<Board> {
+    let connection = get_connection()?;
+
+    let mut statement = connection.prepare("SELECT * FROM board WHERE location=?;")?;
+
+    let board_iter = statement.query_map(params![location], |row| {
+        Ok(Board {
+            id: row.get(0)?,
+            name: row.get(1)?,
+            location: row.get(2)?,
+        })
+    })?;
+
+    let mut boards = Vec::new();
+
+    for board_result in board_iter {
+        match board_result {
+            Ok(board) => boards.push(board),
+            Err(value) => println!("Error while fetching boards: {}", value),
+        }
+    }
+
+    Ok(boards.pop().unwrap())
+}
+
+pub fn remove(board_id: u8) -> Result<()> {
+    let connection = get_connection()?;
+
+    connection.execute(
+        "
+        DELETE FROM board where id=?1;
+        ",
+        params![board_id],
+    )?;
+
+    Ok(())
 }
