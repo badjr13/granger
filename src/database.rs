@@ -30,7 +30,7 @@ pub fn get_connection() -> Result<Connection, rusqlite::Error> {
 }
 
 pub fn inintialize_database() -> Result<()> {
-    let connection = get_connection().unwrap();
+    let connection = get_connection()?;
 
     connection.execute(
         "CREATE TABLE IF NOT EXISTS board (

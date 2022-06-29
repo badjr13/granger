@@ -69,7 +69,10 @@ pub fn parse_board_options(options: &ArgMatches) {
 
         let board = board::data::get_one_by_location(path_to_git_repository).unwrap();
 
-        board::data::remove(board.id);
+        match board::data::remove(board.id) {
+            Ok(_) => println!("{:?} board successfully removed.", board.name),
+            Err(value) => println!("{:?}", value),
+        }
     }
 }
 

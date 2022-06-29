@@ -63,7 +63,10 @@ pub fn get_one_by_location(location: String) -> Result<Board> {
         }
     }
 
-    Ok(boards.pop().unwrap())
+    // This needs cleaned up. Error if user tries to remove a board that doesn't exist.
+    let board = boards.pop().unwrap();
+
+    Ok(board)
 }
 
 pub fn remove(board_id: u8) -> Result<()> {
