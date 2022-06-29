@@ -67,7 +67,7 @@ pub fn parse_board_options(options: &ArgMatches) {
         let path_to_git_repository =
             get_root_path_if_git_repository(&current_working_directory).unwrap();
 
-        let board = board::data::get_one_by_location(path_to_git_repository).unwrap();
+        let board = board::data::get_by_location(path_to_git_repository).unwrap();
 
         match board::data::remove(board.id) {
             Ok(_) => println!("{:?} board successfully removed.", board.name),

@@ -41,12 +41,12 @@ pub fn get_all() -> Result<Vec<Board>> {
     Ok(boards)
 }
 
-pub fn get_one_by_location(location: String) -> Result<Board> {
+pub fn get_by_location(location: String) -> Result<Board> {
     let connection = get_connection()?;
 
     let mut statement = connection.prepare("SELECT * FROM board WHERE location=?;")?;
 
-    let board_iter = statement.query_map(params![location], |row| {
+    let row = statement.query_row(params![location], |row| {
         Ok(Board {
             id: row.get(0)?,
             name: row.get(1)?,
@@ -54,19 +54,7 @@ pub fn get_one_by_location(location: String) -> Result<Board> {
         })
     })?;
 
-    let mut boards = Vec::new();
-
-    for board_result in board_iter {
-        match board_result {
-            Ok(board) => boards.push(board),
-            Err(value) => println!("Error while fetching boards: {}", value),
-        }
-    }
-
-    // This needs cleaned up. Error if user tries to remove a board that doesn't exist.
-    let board = boards.pop().unwrap();
-
-    Ok(board)
+    Ok(row)
 }
 
 pub fn remove(board_id: u8) -> Result<()> {
