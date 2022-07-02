@@ -41,5 +41,29 @@ pub fn inintialize_database() -> Result<()> {
         [],
     )?;
 
+    connection.execute(
+        "CREATE TABLE IF NOT EXISTS ticket (
+            id          INTEGER PRIMARY KEY,
+            board_id    INTEGER,
+            title       TEXT NOT NULL,
+            description TEXT NOT NULL,
+            state       TEXT NOT NULL
+        )",
+        [],
+    )?;
+
+    connection.execute(
+        "CREATE TABLE IF NOT EXISTS state (
+            todo_count    INTEGER,
+            blocked_count INTEGER,
+            doing_count   INTEGER,
+            review_count  INTEGER,
+            done_count    INTEGER,
+            urgent_count  INTEGER
+
+        )",
+        [],
+    )?;
+
     Ok(())
 }
