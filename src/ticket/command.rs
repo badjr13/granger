@@ -1,4 +1,9 @@
+use crate::get_granger_data_directory;
 use clap::{Arg, ArgMatches, Command};
+use std::env;
+use std::fs::OpenOptions;
+use std::io::ErrorKind;
+use std::path::PathBuf;
 
 pub fn get_ticket_command() -> Command<'static> {
     Command::new("ticket")
@@ -49,7 +54,8 @@ pub fn get_ticket_command() -> Command<'static> {
 
 pub fn parse_ticket_options(options: &ArgMatches) {
     if options.is_present("create") {
-        println!("CREATE")
+        let default_editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
+        create_new_ticket(default_editor);
     }
     if options.is_present("read") {
         println!("READ")
@@ -66,4 +72,34 @@ pub fn parse_ticket_options(options: &ArgMatches) {
     if options.is_present("move") {
         println!("MOVE")
     }
+}
+
+fn create_new_ticket(editor: String) {
+    let new_ticket_template = get_new_ticket_template();
+
+    match std::process::Command::new(editor)
+        .arg(new_ticket_template)
+        .status()
+    {
+        Ok(ticket_template) => ticket_template,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => panic!("Could not find editor provided."),
+            other_error => panic!("{:?}", other_error),
+        },
+    };
+}
+
+fn get_new_ticket_template() -> PathBuf {
+    let granger_db_directory = get_granger_data_directory();
+
+    let new_ticket_template = granger_db_directory.join(".ticket_template.toml");
+
+    OpenOptions::new()
+        .create(true)
+        .read(true)
+        .write(true)
+        .open(&new_ticket_template)
+        .expect("Failed to find laydown.ron file");
+
+    new_ticket_template
 }

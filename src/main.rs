@@ -1,4 +1,6 @@
 use clap::{ArgMatches, Command};
+use std::fs;
+use std::path::PathBuf;
 
 mod database;
 use crate::database::inintialize_database;
@@ -8,6 +10,16 @@ use crate::board::command::{get_board_command, parse_board_options};
 
 mod ticket;
 use crate::ticket::command::{get_ticket_command, parse_ticket_options};
+
+pub fn get_granger_data_directory() -> PathBuf {
+    let granger_data_directory = dirs::data_dir()
+        .expect("Failed to find granger data directory")
+        .join("granger");
+
+    fs::create_dir(&granger_data_directory).ok();
+
+    granger_data_directory
+}
 
 fn main() {
     inintialize_database().unwrap();

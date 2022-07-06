@@ -1,17 +1,10 @@
+use crate::get_granger_data_directory;
 use rusqlite::{Connection, Result};
-use std::fs;
 use std::fs::OpenOptions;
 use std::path::PathBuf;
 
-pub fn get_granger_db_directory() -> PathBuf {
-    dirs::data_dir()
-        .expect("Failed to find laydown config directory")
-        .join("granger")
-}
-
 pub fn get_path_to_db() -> PathBuf {
-    let granger_db_directory = get_granger_db_directory();
-    fs::create_dir(&granger_db_directory).ok();
+    let granger_db_directory = get_granger_data_directory();
 
     let granger_db_file: PathBuf = granger_db_directory.join("granger.db");
 
