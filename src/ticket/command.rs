@@ -1,9 +1,6 @@
-use crate::get_granger_data_directory;
 use clap::{Arg, ArgMatches, Command};
 use std::env;
-use std::fs::OpenOptions;
 use std::io::ErrorKind;
-use std::path::PathBuf;
 
 pub fn get_ticket_command() -> Command<'static> {
     Command::new("ticket")
