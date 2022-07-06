@@ -75,10 +75,8 @@ pub fn parse_ticket_options(options: &ArgMatches) {
 }
 
 fn create_new_ticket(editor: String) {
-    let new_ticket_template = get_new_ticket_template();
-
     match std::process::Command::new(editor)
-        .arg(new_ticket_template)
+        .arg("/home/badjr13/workspaces/granger/src/ticket/template.toml")
         .status()
     {
         Ok(ticket_template) => ticket_template,
@@ -87,19 +85,4 @@ fn create_new_ticket(editor: String) {
             other_error => panic!("{:?}", other_error),
         },
     };
-}
-
-fn get_new_ticket_template() -> PathBuf {
-    let granger_db_directory = get_granger_data_directory();
-
-    let new_ticket_template = granger_db_directory.join(".ticket_template.toml");
-
-    OpenOptions::new()
-        .create(true)
-        .read(true)
-        .write(true)
-        .open(&new_ticket_template)
-        .expect("Failed to find laydown.ron file");
-
-    new_ticket_template
 }
