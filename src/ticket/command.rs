@@ -2,8 +2,6 @@ use clap::{Arg, ArgMatches, Command};
 use std::env;
 use std::io::ErrorKind;
 
-use crate::get_granger_data_directory;
-
 pub fn get_ticket_command() -> Command<'static> {
     Command::new("ticket")
         .about("Manage Tickets")
@@ -53,8 +51,7 @@ pub fn get_ticket_command() -> Command<'static> {
 
 pub fn parse_ticket_options(options: &ArgMatches) {
     if options.is_present("create") {
-        let default_editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
-        create_new_ticket(default_editor);
+        create_new_ticket();
     }
     if options.is_present("read") {
         println!("READ")
@@ -73,38 +70,46 @@ pub fn parse_ticket_options(options: &ArgMatches) {
     }
 }
 
-fn create_new_ticket(editor: String) {
+fn create_new_ticket() {
     create_temporary_new_ticket_file();
-    //     // let child_process = std::process::Command::new(editor)
-    //     let child_process = std::process::Command::new("ls")
-    //         .arg("/home/badjr13/workspaces")
-    //         .stdout(std::process::Stdio::piped())
-    //         .spawn()
-    //         .expect("wow bob");
 
-    //     let testaroo = child_process.wait_with_output().expect("wow bob 2");
+    let temp_file = format!(
+        "{}/granger_ticket_template.toml",
+        env::temp_dir().to_str().unwrap(),
+    );
 
-    //     println!("{:?}", testaroo);
+    open_temporary_new_ticket_file(&temp_file);
+
+    // Processing of user input goes here
+
+    remove_temporary_new_ticket_file(temp_file);
 }
 
-// {
-//     Ok(ticket_template) => ticket_template,
-//     Err(error) => match error.kind() {
-//         ErrorKind::NotFound => panic!("Could not find editor provided."),
-//         other_error => panic!("{:?}", other_error),
-//     },
-// };
-
 fn create_temporary_new_ticket_file() {
-    let granger_data_directory = get_granger_data_directory();
-
-    let testaroo = std::process::Command::new("cp")
+    std::process::Command::new("cp")
         .args([
-            "/home/badjr13/workspaces/granger/src/ticket/template.toml",
-            granger_data_directory.to_str().unwrap(),
+            "/home/badjr13/workspaces/granger/src/ticket/granger_ticket_template.toml",
+            env::temp_dir().to_str().unwrap(),
         ])
         .output()
         .expect("oh no");
+}
 
-    println!("{:?}", testaroo)
+fn open_temporary_new_ticket_file(temp_file: &String) {
+    let editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
+
+    match std::process::Command::new(editor).arg(&temp_file).status() {
+        Ok(new_ticket_template) => new_ticket_template,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => panic!("Could not find editor provided."),
+            other_error => panic!("{:?}", other_error),
+        },
+    };
+}
+
+fn remove_temporary_new_ticket_file(temp_file: String) {
+    std::process::Command::new("rm")
+        .arg(temp_file)
+        .status()
+        .unwrap();
 }
