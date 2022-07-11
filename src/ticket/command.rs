@@ -1,5 +1,6 @@
 use clap::{Arg, ArgMatches, Command};
 use std::env;
+use std::fs;
 use std::io::ErrorKind;
 
 pub fn get_ticket_command() -> Command<'static> {
@@ -73,19 +74,15 @@ pub fn parse_ticket_options(options: &ArgMatches) {
 fn create_new_ticket() {
     create_temporary_new_ticket_file();
 
-    let temp_file = format!(
-        "{}/granger_ticket_template.toml",
-        env::temp_dir().to_str().unwrap(),
-    );
+    open_temporary_new_ticket_file();
 
-    open_temporary_new_ticket_file(&temp_file);
+    process_new_ticket_data();
 
-    // Processing of user input goes here
-
-    remove_temporary_new_ticket_file(temp_file);
+    remove_temporary_new_ticket_file();
 }
 
 fn create_temporary_new_ticket_file() {
+    // Need to figure out how to include template file in binary
     std::process::Command::new("cp")
         .args([
             "/home/badjr13/workspaces/granger/src/ticket/granger_ticket_template.toml",
@@ -95,10 +92,19 @@ fn create_temporary_new_ticket_file() {
         .expect("oh no");
 }
 
-fn open_temporary_new_ticket_file(temp_file: &String) {
+fn get_temporary_new_ticket_file() -> String {
+    format!(
+        "{}/granger_ticket_template.toml",
+        env::temp_dir().to_str().unwrap(),
+    )
+}
+
+fn open_temporary_new_ticket_file() {
     let editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
 
-    match std::process::Command::new(editor).arg(&temp_file).status() {
+    let temp_file = get_temporary_new_ticket_file();
+
+    match std::process::Command::new(editor).arg(temp_file).status() {
         Ok(new_ticket_template) => new_ticket_template,
         Err(error) => match error.kind() {
             ErrorKind::NotFound => panic!("Could not find editor provided."),
@@ -107,7 +113,25 @@ fn open_temporary_new_ticket_file(temp_file: &String) {
     };
 }
 
-fn remove_temporary_new_ticket_file(temp_file: String) {
+fn process_new_ticket_data() {
+    let temp_file = get_temporary_new_ticket_file();
+    let content = fs::read_to_string(temp_file)
+        .expect("Failed to read content from new ticket template file.");
+
+    let deserialized_content: toml::Value = match toml::from_str(&content) {
+        Ok(_content) => _content,
+        Err(error) => panic!(
+            "Error deserializing data from new ticket template: {}",
+            error
+        ),
+    };
+
+    println!("{:?}", deserialized_content)
+}
+
+fn remove_temporary_new_ticket_file() {
+    let temp_file = get_temporary_new_ticket_file();
+
     std::process::Command::new("rm")
         .arg(temp_file)
         .status()
