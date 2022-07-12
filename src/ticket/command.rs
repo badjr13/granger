@@ -126,7 +126,21 @@ fn process_new_ticket_data() {
         ),
     };
 
-    println!("{:?}", deserialized_content)
+    let title = deserialized_content
+        .get("title")
+        .unwrap()
+        .as_str()
+        .unwrap()
+        .trim();
+
+    let description = deserialized_content
+        .get("description")
+        .unwrap()
+        .as_str()
+        .unwrap()
+        .trim();
+
+    println!("{:?} - {:?}", title, description)
 }
 
 fn remove_temporary_new_ticket_file() {
