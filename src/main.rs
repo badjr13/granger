@@ -2,6 +2,8 @@ use clap::{ArgMatches, Command};
 use std::fs;
 use std::path::PathBuf;
 
+mod common;
+
 mod database;
 use crate::database::inintialize_database;
 

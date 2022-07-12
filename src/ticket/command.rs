@@ -76,7 +76,7 @@ fn create_new_ticket() {
 
     open_temporary_new_ticket_file();
 
-    process_new_ticket_data();
+    let (title, description) = process_new_ticket_data();
 
     remove_temporary_new_ticket_file();
 }
@@ -113,7 +113,7 @@ fn open_temporary_new_ticket_file() {
     };
 }
 
-fn process_new_ticket_data() {
+fn process_new_ticket_data() -> (String, String) {
     let temp_file = get_temporary_new_ticket_file();
     let content = fs::read_to_string(temp_file)
         .expect("Failed to read content from new ticket template file.");
@@ -131,16 +131,18 @@ fn process_new_ticket_data() {
         .unwrap()
         .as_str()
         .unwrap()
-        .trim();
+        .trim()
+        .to_string();
 
     let description = deserialized_content
         .get("description")
         .unwrap()
         .as_str()
         .unwrap()
-        .trim();
+        .trim()
+        .to_string();
 
-    println!("{:?} - {:?}", title, description)
+    (title, description)
 }
 
 fn remove_temporary_new_ticket_file() {
