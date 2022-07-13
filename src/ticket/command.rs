@@ -1,3 +1,6 @@
+use crate::common;
+use crate::ticket;
+use crate::ticket::model::Ticket;
 use clap::{Arg, ArgMatches, Command};
 use std::env;
 use std::fs;
@@ -77,6 +80,15 @@ fn create_new_ticket() {
     open_temporary_new_ticket_file();
 
     let (title, description) = process_new_ticket_data();
+
+    let current_board_id = common::get_current_board().id;
+
+    let ticket = Ticket::new(current_board_id, title, description);
+
+    match ticket::data::add(&ticket) {
+        Ok(_) => println!("'{}' ticket created.", ticket.title),
+        Err(value) => println!("Error creating '{}' ticket : {}", ticket.title, value),
+    }
 
     remove_temporary_new_ticket_file();
 }

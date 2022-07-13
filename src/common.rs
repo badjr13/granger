@@ -33,7 +33,7 @@ pub fn get_git_repository_name(location: &str) -> String {
     output.pop().unwrap().to_string()
 }
 
-pub fn get_current_board() {
+pub fn get_current_board() -> board::model::Board {
     let current_working_directory =
         current_dir().expect("Failure to get current working directory.");
 
@@ -41,4 +41,6 @@ pub fn get_current_board() {
         get_root_path_if_git_repository(&current_working_directory).unwrap();
 
     let board = board::data::get_by_location(path_to_git_repository).unwrap();
+
+    board
 }

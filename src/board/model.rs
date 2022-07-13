@@ -1,6 +1,6 @@
 #[derive(Debug)]
 pub struct Board {
-    pub id: u8,
+    pub id: usize,
     pub name: String,
     pub location: String,
 }
