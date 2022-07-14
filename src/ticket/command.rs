@@ -97,7 +97,7 @@ fn create_temporary_new_ticket_file() {
     // Need to figure out how to include template file in binary
     std::process::Command::new("cp")
         .args([
-            "/home/badjr13/workspaces/granger/src/ticket/granger_ticket_template.toml",
+            "/home/badjr13/workspaces/granger/src/new_ticket_template.toml",
             env::temp_dir().to_str().unwrap(),
         ])
         .output()
@@ -106,7 +106,7 @@ fn create_temporary_new_ticket_file() {
 
 fn get_temporary_new_ticket_file() -> String {
     format!(
-        "{}/granger_ticket_template.toml",
+        "{}/new_ticket_template.toml",
         env::temp_dir().to_str().unwrap(),
     )
 }
