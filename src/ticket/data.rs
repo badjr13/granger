@@ -10,7 +10,12 @@ pub fn add(ticket: &Ticket) -> Result<()> {
         INSERT INTO ticket (board_id, title, description, state)
         VALUES(?1, ?2, ?3, ?4);
         ",
-        params![ticket.board_id, ticket.title, ticket.description, "todo",],
+        params![
+            ticket.board_id,
+            ticket.title,
+            ticket.description,
+            ticket.state.get(),
+        ],
     )?;
 
     Ok(())

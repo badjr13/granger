@@ -8,7 +8,7 @@ pub enum State {
 }
 
 impl State {
-    fn get(&self) -> String {
+    pub fn get(&self) -> String {
         match self {
             Self::ToDo => String::from("todo"),
             Self::Blocked => String::from("blocked"),
