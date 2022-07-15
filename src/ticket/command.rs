@@ -74,6 +74,7 @@ pub fn parse_ticket_options(options: &ArgMatches) {
     }
 }
 
+// create flow starts here
 fn create_new_ticket() {
     create_temporary_new_ticket_file();
 
@@ -165,3 +166,5 @@ fn remove_temporary_new_ticket_file() {
         .status()
         .unwrap();
 }
+
+// read flow starts here

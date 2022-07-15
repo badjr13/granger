@@ -40,7 +40,5 @@ pub fn get_current_board() -> board::model::Board {
     let path_to_git_repository =
         get_root_path_if_git_repository(&current_working_directory).unwrap();
 
-    let board = board::data::get_by_location(path_to_git_repository).unwrap();
-
-    board
+    board::data::get_by_location(path_to_git_repository).unwrap()
 }
