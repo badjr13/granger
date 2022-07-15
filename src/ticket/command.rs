@@ -168,3 +168,6 @@ fn remove_temporary_new_ticket_file() {
 }
 
 // read flow starts here
+fn read_ticket(ticket_id: usize) {
+    // pick up here
+}

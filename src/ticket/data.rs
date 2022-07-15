@@ -20,3 +20,25 @@ pub fn add(ticket: &Ticket) -> Result<()> {
 
     Ok(())
 }
+
+pub fn get_by_id(id: usize) -> Result<Ticket> {
+    let connection = get_connection()?;
+
+    let mut statement = connection.prepare(
+        "
+        SELECT * FROM ticket WHERE id=?;
+        ",
+    )?;
+
+    let row = statement.query_row(params![id], |row| {
+        Ok(Ticket {
+            id: row.get(0)?,
+            board_id: row.get(1)?,
+            title: row.get(2)?,
+            description: row.get(3)?,
+            state: row.get(4)?,
+        })
+    })?;
+
+    Ok(row)
+}
