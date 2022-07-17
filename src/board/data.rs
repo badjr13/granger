@@ -19,11 +19,7 @@ pub fn add(board: Board) -> Result<()> {
 pub fn get_all() -> Result<Vec<Board>> {
     let connection = get_connection()?;
 
-    let mut statement = connection.prepare(
-        "
-        SELECT * FROM board;
-        "
-    )?;
+    let mut statement = connection.prepare("SELECT * FROM board;")?;
 
     let board_iter = statement.query_map([], |row| {
         Ok(Board {
@@ -48,11 +44,7 @@ pub fn get_all() -> Result<Vec<Board>> {
 pub fn get_by_location(location: String) -> Result<Board> {
     let connection = get_connection()?;
 
-    let mut statement = connection.prepare(
-        "
-        SELECT * FROM board WHERE location=?;
-        "
-    )?;
+    let mut statement = connection.prepare("SELECT * FROM board WHERE location=?;")?;
 
     let row = statement.query_row(params![location], |row| {
         Ok(Board {
@@ -68,12 +60,7 @@ pub fn get_by_location(location: String) -> Result<Board> {
 pub fn remove(board_id: u8) -> Result<()> {
     let connection = get_connection()?;
 
-    connection.execute(
-        "
-        DELETE FROM board where id=?1;
-        ",
-        params![board_id],
-    )?;
+    connection.execute("DELETE FROM board where id=?1;", params![board_id])?;
 
     Ok(())
 }

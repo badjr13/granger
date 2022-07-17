@@ -24,11 +24,7 @@ pub fn add(ticket: &Ticket) -> Result<()> {
 pub fn get_by_id(id: usize) -> Result<Ticket> {
     let connection = get_connection()?;
 
-    let mut statement = connection.prepare(
-        "
-        SELECT * FROM ticket WHERE id=?;
-        ",
-    )?;
+    let mut statement = connection.prepare("SELECT * FROM ticket WHERE id=?;")?;
 
     let row = statement.query_row(params![id], |row| {
         Ok(Ticket {
