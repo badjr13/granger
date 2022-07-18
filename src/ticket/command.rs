@@ -1,5 +1,6 @@
 use crate::common;
 use crate::ticket;
+use crate::ticket::data;
 use crate::ticket::model::Ticket;
 use clap::{Arg, ArgMatches, Command};
 use std::env;
@@ -18,6 +19,8 @@ pub fn get_ticket_command() -> Command<'static> {
         )
         .arg(
             Arg::new("read")
+                .takes_value(true)
+                .value_name("board id")
                 .short('r')
                 .long("read")
                 .help("View details of an existing ticket")
@@ -58,7 +61,8 @@ pub fn parse_ticket_options(options: &ArgMatches) {
         create_new_ticket();
     }
     if options.is_present("read") {
-        println!("READ")
+        let board_id: usize = options.value_of("read").unwrap().parse().unwrap();
+        println!("{:?}", read_ticket(board_id))
     }
     if options.is_present("update") {
         println!("UPDATE")
@@ -168,6 +172,6 @@ fn remove_temporary_new_ticket_file() {
 }
 
 // read flow starts here
-fn read_ticket(ticket_id: usize) {
-    // pick up here
+fn read_ticket(ticket_id: usize) -> Ticket {
+    data::get_by_id(ticket_id).unwrap()
 }

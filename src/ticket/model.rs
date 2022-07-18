@@ -18,6 +18,17 @@ impl State {
             Self::Done => String::from("done"),
         }
     }
+
+    pub fn from_sql(state_as_string: &str) -> State {
+        match state_as_string {
+            "todo" => State::ToDo,
+            "blocked" => State::Blocked,
+            "doing" => State::Doing,
+            "review" => State::Review,
+            "done" => State::Done,
+            _ => todo!(),
+        }
+    }
 }
 
 #[derive(Debug)]
