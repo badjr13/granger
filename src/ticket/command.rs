@@ -1,6 +1,6 @@
 use crate::common;
 use crate::ticket;
-use crate::ticket::model::Ticket;
+use crate::ticket::model::{State, Ticket};
 use clap::{Arg, ArgMatches, Command};
 use std::env;
 use std::fs;
@@ -50,6 +50,9 @@ pub fn get_ticket_command() -> Command<'static> {
         )
         .arg(
             Arg::new("move")
+                .takes_value(true)
+                .number_of_values(2)
+                .value_names(&["id", "state"])
                 .short('m')
                 .long("move")
                 .help("Move ticket to a different state in local board")
@@ -61,29 +64,36 @@ pub fn parse_ticket_options(options: &ArgMatches) {
     if options.is_present("create") {
         create_new_ticket();
     }
+
     if options.is_present("read") {
         let ticket_id: usize = options.value_of("read").unwrap().parse().unwrap();
         let ticket = ticket::data::get_by_id(ticket_id).unwrap();
         println!("{:?}", ticket);
     }
+
     if options.is_present("update") {
         println!("UPDATE")
     }
+
     if options.is_present("delete") {
         let ticket_id: usize = options.value_of("delete").unwrap().parse().unwrap();
         ticket::data::delete(ticket_id).unwrap();
         println!("Ticket with id of '{}' deleted successfully.", ticket_id);
     }
+
     if options.is_present("list") {
         let tickets = ticket::data::get_all().unwrap();
         println!("{:#?}", tickets);
     }
+
     if options.is_present("move") {
-        println!("MOVE")
+        let test: Vec<_> = options.values_of("move").unwrap().collect();
+        let ticket_id = test[0].parse().unwrap();
+        let state = State::from_string(test[1]);
+        ticket::data::move_state(ticket_id, state.value()).unwrap();
     }
 }
 
-// create flow starts here
 fn create_new_ticket() {
     create_temporary_new_ticket_file();
 

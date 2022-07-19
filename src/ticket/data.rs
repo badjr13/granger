@@ -79,3 +79,18 @@ pub fn delete(ticket_id: usize) -> Result<()> {
 
     Ok(())
 }
+
+pub fn move_state(ticket_id: usize, state: String) -> Result<()> {
+    let connection = get_connection()?;
+
+    connection.execute(
+        "
+        UPDATE ticket
+        SET state = ?1
+        WHERE id = ?2;
+        ",
+        params![state, ticket_id],
+    )?;
+
+    Ok(())
+}
