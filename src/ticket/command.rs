@@ -61,8 +61,9 @@ pub fn parse_ticket_options(options: &ArgMatches) {
         create_new_ticket();
     }
     if options.is_present("read") {
-        let board_id: usize = options.value_of("read").unwrap().parse().unwrap();
-        println!("{:?}", read_ticket(board_id))
+        let ticket_id: usize = options.value_of("read").unwrap().parse().unwrap();
+        let ticket = ticket::data::get_by_id(ticket_id).unwrap();
+        println!("{:?}", ticket);
     }
     if options.is_present("update") {
         println!("UPDATE")
@@ -71,7 +72,8 @@ pub fn parse_ticket_options(options: &ArgMatches) {
         println!("DELETE")
     }
     if options.is_present("list") {
-        println!("LIST")
+        let tickets = ticket::data::get_all().unwrap();
+        println!("{:#?}", tickets);
     }
     if options.is_present("move") {
         println!("MOVE")
@@ -169,9 +171,4 @@ fn remove_temporary_new_ticket_file() {
         .arg(temp_file)
         .status()
         .unwrap();
-}
-
-// read flow starts here
-fn read_ticket(ticket_id: usize) -> Ticket {
-    data::get_by_id(ticket_id).unwrap()
 }
