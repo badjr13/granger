@@ -19,7 +19,7 @@ pub fn get_ticket_command() -> Command<'static> {
         .arg(
             Arg::new("read")
                 .takes_value(true)
-                .value_name("board id")
+                .value_name("ticket id")
                 .short('r')
                 .long("read")
                 .help("View details of an existing ticket")
@@ -34,6 +34,8 @@ pub fn get_ticket_command() -> Command<'static> {
         )
         .arg(
             Arg::new("delete")
+                .takes_value(true)
+                .value_name("ticket id")
                 .short('d')
                 .long("delete")
                 .help("Delete an existing ticket")
@@ -68,7 +70,9 @@ pub fn parse_ticket_options(options: &ArgMatches) {
         println!("UPDATE")
     }
     if options.is_present("delete") {
-        println!("DELETE")
+        let ticket_id: usize = options.value_of("delete").unwrap().parse().unwrap();
+        ticket::data::delete(ticket_id).unwrap();
+        println!("Ticket with id of '{}' deleted successfully.", ticket_id);
     }
     if options.is_present("list") {
         let tickets = ticket::data::get_all().unwrap();

@@ -71,3 +71,11 @@ pub fn get_all() -> Result<Vec<Ticket>> {
 
     Ok(tickets)
 }
+
+pub fn delete(ticket_id: usize) -> Result<()> {
+    let connection = get_connection()?;
+
+    connection.execute("DELETE FROM ticket WHERE id=?;", params![ticket_id])?;
+
+    Ok(())
+}
