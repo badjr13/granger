@@ -1,6 +1,5 @@
 use crate::common;
 use crate::ticket;
-use crate::ticket::data;
 use crate::ticket::model::Ticket;
 use clap::{Arg, ArgMatches, Command};
 use std::env;
