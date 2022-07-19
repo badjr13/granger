@@ -1,3 +1,9 @@
+const TODO: &str = "todo";
+const BLOCKED: &str = "blocked";
+const DOING: &str = "doing";
+const REVIEW: &str = "review";
+const DONE: &str = "done";
+
 #[allow(dead_code)]
 #[derive(Debug)]
 pub enum State {
@@ -9,23 +15,23 @@ pub enum State {
 }
 
 impl State {
-    pub fn get(&self) -> String {
+    pub fn value(&self) -> String {
         match self {
-            Self::ToDo => String::from("todo"),
-            Self::Blocked => String::from("blocked"),
-            Self::Doing => String::from("doing"),
-            Self::Review => String::from("review"),
-            Self::Done => String::from("done"),
+            Self::ToDo => String::from(TODO),
+            Self::Blocked => String::from(BLOCKED),
+            Self::Doing => String::from(DOING),
+            Self::Review => String::from(REVIEW),
+            Self::Done => String::from(DONE),
         }
     }
 
-    pub fn from_sql(state_as_string: &str) -> State {
+    pub fn from_string(state_as_string: &str) -> State {
         match state_as_string {
-            "todo" => State::ToDo,
-            "blocked" => State::Blocked,
-            "doing" => State::Doing,
-            "review" => State::Review,
-            "done" => State::Done,
+            TODO => State::ToDo,
+            BLOCKED => State::Blocked,
+            DOING => State::Doing,
+            REVIEW => State::Review,
+            DONE => State::Done,
             _ => todo!(),
         }
     }

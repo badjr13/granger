@@ -14,7 +14,7 @@ pub fn add(ticket: &Ticket) -> Result<()> {
             ticket.board_id,
             ticket.title,
             ticket.description,
-            ticket.state.get(),
+            ticket.state.value(),
         ],
     )?;
 
@@ -27,16 +27,15 @@ pub fn get_by_id(id: usize) -> Result<Ticket> {
     let mut statement = connection.prepare("SELECT * FROM ticket WHERE id=?;")?;
 
     let row = statement.query_row(params![id], |row| {
-        // let _state = row.get(4)?;
-
-        // println!("{:?}", _state);
+        let state: String = row.get(4)?;
+        let state_as_str: &str = state.as_str();
 
         Ok(Ticket {
             id: row.get(0)?,
             board_id: row.get(1)?,
             title: row.get(2)?,
             description: row.get(3)?,
-            state: State::from_sql("todo"),
+            state: State::from_string(state_as_str),
         })
     })?;
 
