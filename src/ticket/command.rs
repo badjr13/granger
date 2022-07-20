@@ -27,6 +27,8 @@ pub fn get_ticket_command() -> Command<'static> {
         )
         .arg(
             Arg::new("update")
+                .takes_value(true)
+                .value_name("ticket id")
                 .short('u')
                 .long("update")
                 .help("Update details of an existing ticket")
@@ -72,7 +74,9 @@ pub fn parse_ticket_options(options: &ArgMatches) {
     }
 
     if options.is_present("update") {
-        println!("UPDATE")
+        let ticket_id: usize = options.value_of("update").unwrap().parse().unwrap();
+        let ticket = ticket::data::get_by_id(ticket_id).unwrap();
+        println!("{:?}", ticket);
     }
 
     if options.is_present("delete") {
@@ -87,9 +91,9 @@ pub fn parse_ticket_options(options: &ArgMatches) {
     }
 
     if options.is_present("move") {
-        let test: Vec<_> = options.values_of("move").unwrap().collect();
-        let ticket_id = test[0].parse().unwrap();
-        let state = State::from_string(test[1]);
+        let arguments: Vec<_> = options.values_of("move").unwrap().collect();
+        let ticket_id = arguments[0].parse().unwrap();
+        let state = State::from_string(arguments[1]);
         ticket::data::move_state(ticket_id, state.value()).unwrap();
     }
 }
@@ -117,7 +121,7 @@ fn create_temporary_new_ticket_file() {
     // Need to figure out how to include template file in binary
     std::process::Command::new("cp")
         .args([
-            "/home/badjr13/workspaces/granger/src/new_ticket_template.toml",
+            "/home/badjr13/workspaces/granger/src/ticket_template.toml",
             env::temp_dir().to_str().unwrap(),
         ])
         .output()
@@ -125,10 +129,7 @@ fn create_temporary_new_ticket_file() {
 }
 
 fn get_temporary_new_ticket_file() -> String {
-    format!(
-        "{}/new_ticket_template.toml",
-        env::temp_dir().to_str().unwrap(),
-    )
+    format!("{}/ticket_template.toml", env::temp_dir().to_str().unwrap(),)
 }
 
 fn open_temporary_new_ticket_file() {
@@ -137,7 +138,7 @@ fn open_temporary_new_ticket_file() {
     let temp_file = get_temporary_new_ticket_file();
 
     match std::process::Command::new(editor).arg(temp_file).status() {
-        Ok(new_ticket_template) => new_ticket_template,
+        Ok(ticket_template) => ticket_template,
         Err(error) => match error.kind() {
             ErrorKind::NotFound => panic!("Could not find editor provided."),
             other_error => panic!("{:?}", other_error),
