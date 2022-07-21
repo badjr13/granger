@@ -94,3 +94,18 @@ pub fn move_state(ticket_id: usize, state: String) -> Result<()> {
 
     Ok(())
 }
+
+pub fn update(ticket_id: usize, title: String, description: String) -> Result<()> {
+    let connection = get_connection()?;
+
+    connection.execute(
+        "
+        UPDATE ticket
+        SET title = ?2, description = ?3
+        WHERE id = ?1;
+        ",
+        params![ticket_id, title, description],
+    )?;
+
+    Ok(())
+}

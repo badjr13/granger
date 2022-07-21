@@ -1,3 +1,5 @@
+use serde::Serialize;
+
 const TODO: &str = "todo";
 const BLOCKED: &str = "blocked";
 const DOING: &str = "doing";
@@ -5,7 +7,7 @@ const REVIEW: &str = "review";
 const DONE: &str = "done";
 
 #[allow(dead_code)]
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub enum State {
     ToDo,
     Blocked,
@@ -37,12 +39,19 @@ impl State {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Ticket {
+    #[serde(skip_serializing)]
     pub id: usize,
+
+    #[serde(skip_serializing)]
     pub board_id: usize,
+
     pub title: String,
+
     pub description: String,
+
+    #[serde(skip_serializing)]
     pub state: State,
 }
 
