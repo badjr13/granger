@@ -100,7 +100,7 @@ pub fn parse_ticket_options(options: &ArgMatches) {
 fn create_new_ticket() {
     create_ticket_file();
 
-    open_ticket_file();
+    open_interactive_ticket_file();
 
     let (title, description) = process_ticket_data();
 
@@ -124,7 +124,7 @@ fn update_ticket(ticket_id: usize) {
 
     write_to_ticket_file(ticket_toml_string);
 
-    open_ticket_file();
+    open_interactive_ticket_file();
 
     let (title, description) = process_ticket_data();
 
@@ -146,7 +146,7 @@ fn get_ticket_file() -> String {
     format!("{}/ticket_template.toml", env::temp_dir().to_str().unwrap(),)
 }
 
-fn open_ticket_file() {
+fn open_interactive_ticket_file() {
     let editor = env::var("EDITOR").unwrap_or_else(|_| "vi".to_string());
 
     let temp_file = get_ticket_file();
